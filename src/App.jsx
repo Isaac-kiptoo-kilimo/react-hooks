@@ -9,7 +9,7 @@ import './App.css'
 
   const[count,setCount]=useState(4);
   const[theme,setTheme]=useState("blue");
-  
+  const [items,setItems]=useState([])
   const[resourceType, setResourceType]=useState('posts')
 
   function decreamentCount(){
@@ -23,9 +23,11 @@ import './App.css'
   }
 
   useEffect(()=>{
-    console.log("Its getting rendered");
+    fetch(`https://jsonplaceholder.typicode.com/${resourceType}`)
+      .then(response => response.json())
+        .then(json =>setItems(json))
 
-  })
+  },[resourceType])
   return(
     <>
     <div className="count">
@@ -40,6 +42,9 @@ import './App.css'
     <button onClick={()=>setResourceType('users')}>users</button>
     <button onClick={()=>setResourceType('comments')}>Comments</button>
     <h4>{resourceType}</h4>
+    {items.map(item=>{
+      return <pre>{JSON.stringify(item)}</pre>
+    })}
     </div>
 
     </>
